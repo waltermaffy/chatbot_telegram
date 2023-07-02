@@ -1,0 +1,59 @@
+name: chatbot_telegram
+services:
+  chatbot-telegram:
+    build:
+      context: /Users/walter/Progetti/CACHED/chatbot_telegram
+      dockerfile: Dockerfile
+    command:
+    - python3
+    - bot/bot.py
+    container_name: chatbot-telegram
+    depends_on:
+      mongo:
+        condition: service_started
+    networks:
+      default: null
+    restart: always
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      host_ip: 127.0.0.1
+      target: 27017
+      published: "27017"
+      protocol: tcp
+    restart: always
+    volumes:
+    - type: bind
+      source: /Users/walter/Progetti/CACHED/chatbot_telegram/mongodb
+      target: /data/db
+      bind:
+        create_host_path: true
+  mongo-express:
+    container_name: mongo-express
+    depends_on:
+      mongo:
+        condition: service_started
+    environment:
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+      ME_CONFIG_BASICAUTH_USERNAME: username
+      ME_CONFIG_MONGODB_AUTH_DATABASE: chatgpt_telegram_bot
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "false"
+      ME_CONFIG_MONGODB_PORT: "27017"
+      ME_CONFIG_MONGODB_SERVER: mongo
+    image: mongo-express:latest
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      host_ip: 127.0.0.1
+      target: 8081
+      published: "8081"
+      protocol: tcp
+    restart: always
+networks:
+  default:
+    name: chatbot_telegram_default
