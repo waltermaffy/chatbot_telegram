@@ -1,0 +1,18 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: chatbot-telegram
+build:
+  artifacts:
+    - image: chatbot-telegram
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - k8s/chatbot-telegram-default-networkpolicy.yaml
+    - k8s/chatbot-telegram-deployment.yaml
+    - k8s/mongo-claim0-persistentvolumeclaim.yaml
+    - k8s/mongo-deployment.yaml
+    - k8s/mongo-express-deployment.yaml
+    - k8s/mongo-service.yaml
+    - k8s/mongo-express-service.yaml

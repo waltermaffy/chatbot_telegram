@@ -11,8 +11,8 @@ services:
       - ${MONGODB_PATH:-./mongodb}:/data/db
     # TODO: add auth
 
-  chatbot_telegram:
-    container_name: chatbot_telegram
+  chatbot-telegram:
+    container_name: chatbot-telegram
     command: python3 bot/bot.py
     restart: always
     build:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - mongo
 
-  mongo_express:
+  mongo-express:
     container_name: mongo-express
     image: mongo-express:latest
     restart: always
